@@ -1,16 +1,16 @@
 import { useState, useEffect, useRef } from "react";
 
 const C = {
-  bg: "#0a0e27",
-  surface: "#1a1f3a",
-  surface2: "#242d4a",
-  surface3: "#2d3650",
-  primary: "#9d4edd",
-  secondary: "#00d4ff",
-  accent: "#a78bfa",
-  text: "#e2e8f0",
-  textMuted: "#94a3b8",
-  border: "#2d3650",
+  bg: "#0f0f1e",
+  surface: "#1a1a2e",
+  surface2: "#262641",
+  surface3: "#2f2f47",
+  primary: "#7C5CFF",
+  secondary: "#B9AEFF",
+  accent: "#9078FF",
+  text: "#f5f5f5",
+  textMuted: "#a0a0b0",
+  border: "#353550",
   success: "#10b981",
   error: "#ef4444",
 };
@@ -29,7 +29,7 @@ function parseName(filename) {
 }
 
 function Avatar({ title, size = 44 }) {
-  const colors = ["#9d4edd", "#00d4ff", "#a78bfa", "#06b6d4", "#c084fc", "#22d3ee"];
+  const colors = ["#7C5CFF", "#B9AEFF", "#9078FF", "#8B6FFF", "#A599FF", "#9D8AFF"];
   const idx = title ? title.charCodeAt(0) % colors.length : 0;
   return (
     <div
@@ -45,7 +45,7 @@ function Avatar({ title, size = 44 }) {
         fontSize: size * 0.4,
         fontWeight: 700,
         color: "#fff",
-        boxShadow: `0 0 16px ${colors[idx]}40`,
+        boxShadow: `0 0 10px ${colors[idx]}25`,
       }}
     >
       {title ? title[0].toUpperCase() : "♪"}
@@ -60,6 +60,8 @@ export default function App() {
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.8);
+  const [volumeShowFeedback, setVolumeShowFeedback] = useState(false);
+  const volumeFeedbackTimeoutRef = useRef(null);
   const [tab, setTab] = useState("library");
   const [lyrics, setLyrics] = useState("");
   const [lyricsStatus, setLyricsStatus] = useState("idle");
@@ -311,6 +313,18 @@ export default function App() {
     transition: "all 0.3s ease",
   });
 
+  const handleVolumeChange = (e) => {
+    setVolume(+e.target.value);
+    setVolumeShowFeedback(true);
+    
+    if (volumeFeedbackTimeoutRef.current) {
+      clearTimeout(volumeFeedbackTimeoutRef.current);
+    }
+    volumeFeedbackTimeoutRef.current = setTimeout(() => {
+      setVolumeShowFeedback(false);
+    }, 1500);
+  };
+
   // Mini Mode Component
   if (miniMode) {
     return (
@@ -321,12 +335,12 @@ export default function App() {
           right: 20,
           width: 320,
           background: `linear-gradient(135deg, ${C.surface}dd, ${C.surface2}dd)`,
-          border: `1px solid ${C.primary}40`,
+          border: `1px solid ${C.primary}35`,
           borderRadius: 16,
           padding: 16,
           color: C.text,
           fontFamily: "'Segoe UI', system-ui, sans-serif",
-          boxShadow: `0 20px 60px rgba(157, 78, 221, 0.3)`,
+          boxShadow: `0 20px 60px rgba(124, 92, 255, 0.15)`,
           zIndex: 9999,
           backdropFilter: "blur(10px)",
         }}
@@ -389,7 +403,7 @@ export default function App() {
           <button
             onClick={togglePlay}
             style={{
-              background: `linear-gradient(135deg, ${C.primary}, ${C.secondary})`,
+              background: `linear-gradient(135deg, ${C.primary}, ${C.accent})`,
               border: "none",
               color: "#fff",
               width: 40,
@@ -400,7 +414,7 @@ export default function App() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              boxShadow: `0 0 16px ${C.primary}60`,
+              boxShadow: `0 0 10px ${C.primary}35`,
             }}
           >
             {playing ? "⏸" : "▶"}
@@ -455,7 +469,7 @@ export default function App() {
         display: "flex",
         flexDirection: "column",
         height: "100vh",
-        background: `linear-gradient(135deg, ${C.bg}, #0f1233)`,
+        background: `linear-gradient(135deg, ${C.bg}, #131323)`,
         color: C.text,
         fontFamily: "'Segoe UI', system-ui, sans-serif",
         overflow: "hidden",
@@ -478,7 +492,7 @@ export default function App() {
           style={{
             position: "absolute",
             inset: 0,
-            background: `rgba(157, 78, 221, 0.15)`,
+            background: `rgba(124, 92, 255, 0.1)`,
             border: `3px dashed ${C.primary}`,
             zIndex: 99,
             display: "flex",
@@ -492,8 +506,8 @@ export default function App() {
             style={{
               fontSize: 28,
               fontWeight: 700,
-              color: C.secondary,
-              textShadow: `0 0 20px ${C.primary}`,
+              color: C.primary,
+              textShadow: `0 0 15px ${C.primary}30`,
             }}
           >
             🎵 Soltá los archivos acá
@@ -519,7 +533,7 @@ export default function App() {
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <span style={{ fontSize: 28, textShadow: `0 0 10px ${C.primary}` }}>
+            <span style={{ fontSize: 28, textShadow: `0 0 8px ${C.primary}25` }}>
               🎧
             </span>
             <span
@@ -539,9 +553,9 @@ export default function App() {
             <button
               onClick={() => setMiniMode(true)}
               style={{
-                background: `linear-gradient(135deg, ${C.primary}40, ${C.secondary}40)`,
+                background: `linear-gradient(135deg, ${C.primary}25, ${C.secondary}25)`,
                 color: C.secondary,
-                border: `1px solid ${C.secondary}60`,
+                border: `1px solid ${C.primary}50`,
                 padding: "8px 14px",
                 borderRadius: 12,
                 cursor: "pointer",
@@ -554,14 +568,14 @@ export default function App() {
             </button>
             <label
               style={{
-                background: `linear-gradient(135deg, ${C.primary}40, ${C.secondary}40)`,
+                background: `linear-gradient(135deg, ${C.primary}25, ${C.secondary}25)`,
                 color: C.secondary,
                 padding: "8px 14px",
                 borderRadius: 12,
                 cursor: "pointer",
                 fontSize: 12,
                 fontWeight: 600,
-                border: `1px solid ${C.secondary}60`,
+                border: `1px solid ${C.primary}50`,
                 display: "flex",
                 alignItems: "center",
                 gap: 6,
@@ -624,7 +638,7 @@ export default function App() {
                   width: "100%",
                   background: C.surface2,
                   color: C.text,
-                  border: `1px solid ${C.primary}40`,
+                  border: `1px solid ${C.primary}30`,
                   borderRadius: 12,
                   padding: "10px 14px",
                   fontSize: 13,
@@ -672,7 +686,7 @@ export default function App() {
                         marginBottom: 6,
                         background:
                           current === realIdx
-                            ? `linear-gradient(135deg, ${C.primary}20, ${C.secondary}20)`
+                            ? `linear-gradient(135deg, ${C.primary}15, ${C.secondary}15)`
                             : "transparent",
                         cursor: "pointer",
                         borderLeft: `4px solid ${
@@ -733,7 +747,7 @@ export default function App() {
                           style={{
                             background: C.surface3,
                             color: C.secondary,
-                            border: `1px solid ${C.primary}40`,
+                            border: `1px solid ${C.primary}30`,
                             borderRadius: 8,
                             fontSize: 11,
                             padding: "5px 8px",
@@ -777,7 +791,7 @@ export default function App() {
                     display: "flex",
                     alignItems: "center",
                     gap: 14,
-                    border: `1px solid ${C.primary}40`,
+                    border: `1px solid ${C.primary}30`,
                   }}
                 >
                   <Avatar title={currentSong.title} size={52} />
@@ -823,9 +837,9 @@ export default function App() {
                 <button
                   onClick={fetchLyrics}
                   style={{
-                    background: `linear-gradient(135deg, ${C.primary}40, ${C.secondary}40)`,
+                    background: `linear-gradient(135deg, ${C.primary}25, ${C.secondary}25)`,
                     color: C.secondary,
-                    border: `1px solid ${C.primary}40`,
+                    border: `1px solid ${C.primary}30`,
                     borderRadius: 10,
                     padding: "10px 16px",
                     cursor: "pointer",
@@ -855,7 +869,7 @@ export default function App() {
                   flex: 1,
                   background: C.surface2,
                   color: C.text,
-                  border: `1px solid ${C.primary}40`,
+                  border: `1px solid ${C.primary}30`,
                   borderRadius: 12,
                   padding: "10px 14px",
                   fontSize: 13,
@@ -866,7 +880,7 @@ export default function App() {
               <button
                 onClick={createPL}
                 style={{
-                  background: `linear-gradient(135deg, ${C.primary}, ${C.secondary})`,
+                  background: `linear-gradient(135deg, ${C.primary}, ${C.accent})`,
                   color: "#fff",
                   border: "none",
                   borderRadius: 12,
@@ -874,7 +888,7 @@ export default function App() {
                   cursor: "pointer",
                   fontSize: 13,
                   fontWeight: 700,
-                  boxShadow: `0 0 16px ${C.primary}60`,
+                  boxShadow: `0 0 10px ${C.primary}35`,
                 }}
               >
                 ➕ Crear
@@ -896,7 +910,7 @@ export default function App() {
                         background: `linear-gradient(135deg, ${C.surface}dd, ${C.surface2}dd)`,
                         borderRadius: 16,
                         padding: 18,
-                        border: `1px solid ${C.primary}40`,
+                        border: `1px solid ${C.primary}30`,
                       }}
                     >
                       <div
@@ -920,7 +934,7 @@ export default function App() {
                             <button
                               onClick={() => playSong(songs.indexOf(plSongs[0]))}
                               style={{
-                                background: `linear-gradient(135deg, ${C.primary}, ${C.secondary})`,
+                                background: `linear-gradient(135deg, ${C.primary}, ${C.accent})`,
                                 color: "#fff",
                                 border: "none",
                                 borderRadius: 20,
@@ -1028,7 +1042,7 @@ export default function App() {
                         marginBottom: 6,
                         background:
                           current === realIdx
-                            ? `linear-gradient(135deg, ${C.primary}20, ${C.secondary}20)`
+                            ? `linear-gradient(135deg, ${C.primary}15, ${C.secondary}15)`
                             : "transparent",
                         cursor: "pointer",
                         transition: "all 0.2s ease",
@@ -1075,7 +1089,7 @@ export default function App() {
                 background: `linear-gradient(135deg, ${C.surface}dd, ${C.surface2}dd)`,
                 borderRadius: 16,
                 padding: 20,
-                border: `1px solid ${C.primary}40`,
+                border: `1px solid ${C.primary}30`,
               }}
             >
               <p
@@ -1129,7 +1143,7 @@ export default function App() {
                   width: "100%",
                   background: C.surface3,
                   color: C.secondary,
-                  border: `1px solid ${C.primary}40`,
+                  border: `1px solid ${C.primary}30`,
                   borderRadius: 10,
                   padding: "10px",
                   cursor: "pointer",
@@ -1159,18 +1173,20 @@ export default function App() {
       >
         {bars.map((h, i) => {
           const t = i / bars.length;
-          const hsl = `hsl(${270 + t * 90}, 100%, ${50 + t * 10}%)`;
+          const r = Math.round(124 + (185 - 124) * t);
+          const g = Math.round(92 + (170 - 92) * t);
+          const b = Math.round(255 + (255 - 255) * t);
           return (
             <div
               key={i}
               style={{
                 flex: 1,
                 height: `${h}px`,
-                background: hsl,
+                background: `rgb(${r},${g},${b})`,
                 borderRadius: "3px 3px 0 0",
-                opacity: playing ? 0.8 : 0.15,
+                opacity: playing ? 0.7 : 0.15,
                 transition: "height 0.1s ease, opacity 0.3s",
-                boxShadow: `0 0 8px ${hsl}60`,
+                boxShadow: `0 0 6px rgba(${r},${g},${b},0.35)`,
               }}
             />
           );
@@ -1181,7 +1197,7 @@ export default function App() {
       <div
         style={{
           background: `linear-gradient(135deg, ${C.surface}dd, ${C.surface2}dd)`,
-          borderTop: `1px solid ${C.primary}40`,
+          borderTop: `1px solid ${C.primary}30`,
           padding: "14px 18px 18px",
           backdropFilter: "blur(10px)",
         }}
@@ -1260,21 +1276,43 @@ export default function App() {
             justifyContent: "space-between",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, position: "relative" }}>
             <span style={{ fontSize: 13, color: C.textMuted }}>🔊</span>
-            <input
-              type="range"
-              min={0}
-              max={1}
-              step={0.01}
-              value={volume}
-              onChange={(e) => setVolume(+e.target.value)}
-              style={{
-                width: 80,
-                accentColor: C.secondary,
-                cursor: "pointer",
-              }}
-            />
+            <div style={{ position: "relative", width: 80 }}>
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.01}
+                value={volume}
+                onChange={handleVolumeChange}
+                style={{
+                  width: "100%",
+                  accentColor: C.secondary,
+                  cursor: "pointer",
+                }}
+              />
+              {volumeShowFeedback && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: -28,
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    background: C.primary,
+                    color: "#fff",
+                    padding: "4px 8px",
+                    borderRadius: 6,
+                    fontSize: 11,
+                    fontWeight: 600,
+                    whiteSpace: "nowrap",
+                    animation: "ch-fade-in 0.2s ease-out, ch-fade-out 0.2s ease-out 1.3s forwards",
+                  }}
+                >
+                  {Math.round(volume * 100)}%
+                </div>
+              )}
+            </div>
           </div>
           <div
             style={{
@@ -1292,7 +1330,7 @@ export default function App() {
             <button
               onClick={togglePlay}
               style={{
-                background: `linear-gradient(135deg, ${C.primary}, ${C.secondary})`,
+                background: `linear-gradient(135deg, ${C.primary}, ${C.accent})`,
                 border: "none",
                 color: "#fff",
                 width: 56,
@@ -1303,7 +1341,7 @@ export default function App() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                boxShadow: `0 0 24px ${C.primary}70`,
+                boxShadow: `0 0 15px ${C.primary}35`,
                 transition: "all 0.3s ease",
               }}
             >
@@ -1324,11 +1362,13 @@ export default function App() {
         @keyframes bounce1 { 0%,100%{height:12px} 50%{height:20px} }
         @keyframes bounce2 { 0%,100%{height:16px} 50%{height:6px} }
         @keyframes bounce3 { 0%,100%{height:14px} 50%{height:22px} }
+        @keyframes ch-fade-in { 0%{opacity:0;transform:translateX(-50%) translateY(4px)} 100%{opacity:1;transform:translateX(-50%) translateY(0)} }
+        @keyframes ch-fade-out { 0%{opacity:1;transform:translateX(-50%) translateY(0)} 100%{opacity:0;transform:translateX(-50%) translateY(-4px)} }
         input[type=range]{height:5px}
         input[type=range]::-webkit-slider-thumb{width:14px;height:14px;border-radius:50%;}
         ::-webkit-scrollbar{width:6px}
         ::-webkit-scrollbar-track{background:transparent}
-        ::-webkit-scrollbar-thumb{background:${C.primary}60;border-radius:4px}
+        ::-webkit-scrollbar-thumb{background:${C.primary}50;border-radius:4px}
       `}</style>
     </div>
   );
