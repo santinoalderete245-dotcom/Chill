@@ -1,0 +1,20 @@
+{
+  "name": "chill",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Reproductor de música flotante con visualizador, playlists, letras y ecualizador en tiempo real",
+  "main": "src/main.jsx",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.0",
+    "vite": "^4.3.9"
+  }
+}
